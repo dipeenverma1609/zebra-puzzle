@@ -1,6 +1,6 @@
 package com.swedbank.hiring.entity;
 
-import com.swedbank.hiring.solver.MappingsValidaters;
+import com.swedbank.hiring.solver.RulesValidaters;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class HouseLists extends LinkedList<Map<String, String>> {
     }
 
     public boolean isValid(Rule rule) {
-        return MappingsValidaters.isValid(this, rule);
+        return RulesValidaters.isValid(this, rule);
     }
 
     public Map<String, String> getMappingForPair(Pair<String, String> pair) {

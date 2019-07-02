@@ -13,6 +13,8 @@ public class RulesUtil {
     public static List<Pair<String, Integer>> getAttributesCount(List<Rule> rules) {
         Map<String, Integer> countMap = new HashMap<>();
 
+        if (rules == null || rules.isEmpty()) return null;
+
         for ( Rule rule : rules) {
             if (rule.isSame() && rule.getPair2()!=null) {
                 Integer value = countMap.get(rule.getPair1().getKey());

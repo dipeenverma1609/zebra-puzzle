@@ -30,7 +30,7 @@ public class Main {
 
         if (rules.isEmpty()) return;
 
-        final HouseLists houseMapping = HouseListsBuilder.getInstance().build(rules);
+        final HouseLists houseMapping = HouseListsBuilder.getInstance().build(rules, HOUSE_COUNT);
         final Map<String, Set<String>> availableValues = HouseListUtils.getAvailableValues(houseMapping, rules);
 
         final Solver solver = new Solver(rules);

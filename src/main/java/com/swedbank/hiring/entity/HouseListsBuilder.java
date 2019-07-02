@@ -7,8 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static com.swedbank.hiring.Main.HOUSE_COUNT;
-
 public class HouseListsBuilder {
     private static HouseListsBuilder ourInstance = new HouseListsBuilder();
 
@@ -19,7 +17,7 @@ public class HouseListsBuilder {
     private HouseListsBuilder() {
     }
 
-    public HouseLists build(List<Rule> rules) {
+    public HouseLists build(List<Rule> rules, int houseCount) {
         {
 
             final List<Pair<String, Integer>> attributesCount = RulesUtil.getAttributesCount(rules);
@@ -40,7 +38,7 @@ public class HouseListsBuilder {
                 }
             }
 
-            if (initialMap.size() != HOUSE_COUNT) {
+            if (initialMap.size() != houseCount) {
                 throw new IllegalArgumentException("Input values are not complete");
             }
 

@@ -9,10 +9,10 @@ import java.util.Map;
 import static com.swedbank.hiring.Main.HOUSE_COUNT;
 import static com.swedbank.hiring.entity.Constants.POSITION;
 
-public class MappingsValidaters {
+public class RulesValidaters {
 
     public static boolean isValid(HouseLists houseMappings, Rule rule) {
-        boolean isValid = true;
+        boolean isValid = false;
         switch (rule.getDirection()) {
             case SAME:
                 for (Map<String, String> mapping : houseMappings) {
@@ -62,48 +62,39 @@ public class MappingsValidaters {
     }
 
     public static boolean isValidForNextTo(Map<String, String> mapping, Pair<String, String> nextPair, HouseLists houseMappings) {
-        if (mapping != null) {
-            if (mapping.containsKey(POSITION)) {
-                try {
-                    int position = Integer.parseInt(mapping.get(POSITION));
-                    if (position + 1 > HOUSE_COUNT) {
+        if (mapping != null && mapping.containsKey(POSITION)) {
+
+            int position = Integer.parseInt(mapping.get(POSITION));
+            if (position + 1 > HOUSE_COUNT) {
+                return false;
+            }
+            Map<String, String> nextItem = houseMappings.getMappingForPair(new Pair<>(POSITION, (position + 1) + ""));
+            if (nextItem != null) {
+                if (nextItem.containsKey(nextPair.getKey()) && nextItem.get(nextPair.getKey()).equals(nextPair.getValue())) {
+                    return true;
+                } else {
+                    if (nextItem.containsKey(nextPair)) {
                         return false;
                     }
-                    Map<String, String> nextItem = houseMappings.getMappingForPair(new Pair<>(POSITION, (position + 1) + ""));
-                    if (nextItem != null) {
-                        if (nextItem.containsKey(nextPair.getKey()) && nextItem.get(nextPair.getKey()).equals(nextPair.getValue())) {
-                            return true;
-                        } else {
-                            if (nextItem.containsKey(nextPair)) {
-                                return false;
-                            }
-                        }
-                    }
-                } catch (NumberFormatException e) {
                 }
             }
         }
         return true;
     }
-    public static boolean isValidforPreviousTo(Map<String, String> item, Pair<String, String> prevPair, HouseLists houseMappings) {
-        if (item != null) {
-            if (item.containsKey(POSITION)) {
-                try {
-                    int position = Integer.parseInt(item.get(POSITION));
-                    if (position - 1 < 1) {
+    public static boolean isValidforPreviousTo(Map<String, String> mapping, Pair<String, String> prevPair, HouseLists houseMappings) {
+        if (mapping != null && mapping.containsKey(POSITION)) {
+            int position = Integer.parseInt(mapping.get(POSITION));
+            if (position - 1 < 1) {
+                return false;
+            }
+            Map<String, String> previousItem = houseMappings.getMappingForPair(new Pair<>(POSITION, (position - 1) + ""));
+            if (previousItem != null) {
+                if (previousItem.containsKey(prevPair.getKey()) && previousItem.get(prevPair.getKey()).equals(prevPair.getValue())) {
+                    return true;
+                } else {
+                    if (previousItem.containsKey(prevPair)) {
                         return false;
                     }
-                    Map<String, String> previousItem = houseMappings.getMappingForPair(new Pair<String, String>(POSITION, (position - 1) + ""));
-                    if (previousItem != null) {
-                        if (previousItem.containsKey(prevPair.getKey()) && previousItem.get(prevPair.getKey()).equals(prevPair.getValue())) {
-                            return true;
-                        } else {
-                            if (previousItem.containsKey(prevPair)) {
-                                return false;
-                            }
-                        }
-                    }
-                } catch (NumberFormatException e) {
                 }
             }
         }
