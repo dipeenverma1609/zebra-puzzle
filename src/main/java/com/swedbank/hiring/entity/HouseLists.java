@@ -1,5 +1,6 @@
 package com.swedbank.hiring.entity;
 
+import com.swedbank.hiring.exception.ValidationFailedException;
 import com.swedbank.hiring.solver.RulesValidaters;
 
 import java.util.LinkedList;
@@ -28,8 +29,13 @@ public class HouseLists extends LinkedList<Map<String, String>> {
         return this.stream().filter(map -> map.containsKey(key)).collect(Collectors.toList());
     }
 
-    public boolean isValid(Rule rule) {
-        return RulesValidaters.isValid(this, rule);
+    public boolean isValid(List<Rule> rules) throws ValidationFailedException {
+        boolean isValid = true;
+        for(Rule rule : rules) {
+            isValid = RulesValidaters.isValid(this, rule);
+            if (!isValid) return isValid;
+        }
+        return isValid;
     }
 
     public Map<String, String> getMappingForPair(Pair<String, String> pair) {

@@ -3,6 +3,7 @@ package com.swedbank.hiring.solver;
 import com.swedbank.hiring.entity.HouseLists;
 import com.swedbank.hiring.entity.Pair;
 import com.swedbank.hiring.entity.Rule;
+import com.swedbank.hiring.exception.ValidationFailedException;
 
 import java.util.Map;
 
@@ -11,13 +12,15 @@ import static com.swedbank.hiring.entity.Constants.POSITION;
 
 public class RulesValidaters {
 
-    public static boolean isValid(HouseLists houseMappings, Rule rule) {
+    public static boolean isValid(HouseLists houseMappings, Rule rule) throws ValidationFailedException {
         boolean isValid = false;
         switch (rule.getDirection()) {
             case SAME:
                 for (Map<String, String> mapping : houseMappings) {
                     isValid = isValidForSame(rule, mapping);
-                    if (!isValid) return false;
+                    if (!isValid) {
+                        throw new ValidationFailedException(rule.getPair1().getKey(), rule.getPair2().getKey());
+                    }
                 }
                 break;
             case NEXT_TO:
@@ -28,6 +31,9 @@ public class RulesValidaters {
                     mapping = houseMappings.getMappingForPair(rule.getPair2());
                     isValid = isValidforPreviousTo(mapping, rule.getPair1(), houseMappings);
                 }
+                if (!isValid) {
+                    throw new ValidationFailedException(rule.getPair1().getKey(), rule.getPair2().getKey(), POSITION);
+                }
                 break;
             case TO_THE_LEFT_OF:
                 mapping = houseMappings.getMappingForPair(rule.getPair1());
@@ -36,6 +42,10 @@ public class RulesValidaters {
                 if (!isValid) {
                     mapping = houseMappings.getMappingForPair(rule.getPair2());
                     isValid = isValidForNextTo(mapping, rule.getPair1(), houseMappings);
+                }
+
+                if (!isValid) {
+                    throw new ValidationFailedException(rule.getPair1().getKey(), rule.getPair2().getKey(), POSITION);
                 }
                 break;
         }
